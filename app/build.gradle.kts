@@ -36,12 +36,26 @@ android {
 }
 
 dependencies {
+    val coreKtxVersion = rootProject.extra["coreKtxVersion"]
+    val appCompatVersion = rootProject.extra["appCompatVersion"]
+    val materialVersion = rootProject.extra["materialVersion"]
+    val constraintLayoutVersion = rootProject.extra["constraintLayoutVersion"]
+    val navigationVersion = rootProject.extra["navigationVersion"]
+    val lifecycleVersion = rootProject.extra["lifecycleVersion"]
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.core:core-ktx:$coreKtxVersion")
+    implementation("androidx.appcompat:appcompat:$appCompatVersion")
+    implementation("com.google.android.material:material:$materialVersion")
+    implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // Navigation libraries:
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation ("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+
+    // Lifecycle libraries:
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
 }
