@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Parking Log</string>
+    <string name="cars">Cars</string>
+    <string name="add">Add</string>
+    <string name="empty_list">Your List Is Empty</string>
 </resources>
