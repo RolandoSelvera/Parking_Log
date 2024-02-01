@@ -1,4 +1,4 @@
-package com.rolandoselvera.parkinglog.view.adapter
+package com.rolandoselvera.parkinglog.view.adapters
 
 import android.content.Context
 import android.view.LayoutInflater

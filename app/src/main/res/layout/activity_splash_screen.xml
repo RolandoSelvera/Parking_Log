@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryColor"
-    tools:context=".view.SplashScreenActivity">
+    tools:context=".view.activities.splashscreen.SplashScreenActivity">
 
     <!-- Otras opciones para imágenes circulares:
     * Crear CustomView.

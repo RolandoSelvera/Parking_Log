@@ -7,8 +7,26 @@
     app:startDestination="@id/carsListFragment">
     <fragment
         android:id="@+id/carsListFragment"
-        android:name="com.rolandoselvera.parkinglog.view.CarsListFragment"
+        android:name="com.rolandoselvera.parkinglog.view.fragments.home.CarsListFragment"
         android:label="@string/cars"
         tools:layout="@layout/fragment_cars_list">
+        <action
+            android:id="@+id/action_carsListFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.rolandoselvera.parkinglog.view.fragments.register.RegisterFragment"
+        android:label="@string/register_car"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_carsListFragment"
+            app:destination="@id/carsListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"
+            app:popUpTo="@id/carsListFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

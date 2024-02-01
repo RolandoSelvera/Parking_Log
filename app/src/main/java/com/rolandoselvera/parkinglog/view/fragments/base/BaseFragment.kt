@@ -1,4 +1,4 @@
-package com.rolandoselvera.parkinglog.view
+package com.rolandoselvera.parkinglog.view.fragments.base
 
 import android.content.Context
 import android.os.Bundle
@@ -7,8 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.rolandoselvera.parkinglog.R
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 /**
  * A simple [Fragment] subclass.
@@ -21,11 +22,19 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     abstract fun getViewBinding(): VB
 
+    abstract fun initializeViews()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = getViewBinding()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeViews()
+        hideKeyboard()
     }
 
     override fun onDestroyView() {
@@ -38,5 +47,20 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         val inputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
+    }
+
+    fun fabShrink(recyclerView: RecyclerView, fab: ExtendedFloatingActionButton) {
+        binding.apply {
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0) {
+                        fab.shrink()
+                    } else {
+                        fab.extend()
+                    }
+                }
+            })
+        }
     }
 }
