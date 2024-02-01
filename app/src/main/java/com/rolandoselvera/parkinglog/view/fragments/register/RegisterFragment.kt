@@ -26,6 +26,10 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
         setupUI()
     }
 
+    override fun initializeViewModel() {
+
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {

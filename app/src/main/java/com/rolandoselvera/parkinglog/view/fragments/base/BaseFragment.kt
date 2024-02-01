@@ -24,10 +24,13 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     abstract fun initializeViews()
 
+    abstract fun initializeViewModel()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = getViewBinding()
+        initializeViewModel()
         return binding.root
     }
 
