@@ -7,4 +7,5 @@
     <color name="secondaryColor">#35579B</color>
     <color name="errorColor">#B00020</color>
     <color name="grayText">#79747E</color>
+    <color name="itemBg">#4FAFC6FF</color>
 </resources>

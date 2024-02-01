@@ -6,30 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".view.CarsListFragment">
 
-    <ImageView
-        android:id="@+id/imgCar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/img_car"
+    <include
+        android:id="@+id/containerStates"
+        layout="@layout/container_empty_state"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/containerCarsList"
+        layout="@layout/container_cars_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_0"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_20"
-        android:fontFamily="@font/questrial"
-        android:text="@string/empty_list"
-        android:textColor="@color/grayText"
-        android:textSize="@dimen/text_25"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imgCar" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dimen_16"
@@ -38,7 +33,7 @@
         android:fontFamily="@font/questrial"
         android:text="@string/add"
         android:textColor="@color/white"
-        app:icon="@android:drawable/ic_input_add"
+        app:icon="@drawable/ic_add"
         app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

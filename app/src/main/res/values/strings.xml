@@ -3,4 +3,5 @@
     <string name="cars">Cars</string>
     <string name="add">Add</string>
     <string name="empty_list">Your List Is Empty</string>
+    <string name="car_title">%1$s - %2$s - %3$s</string>
 </resources>
