@@ -18,25 +18,30 @@ Android y [Jetpack](https://developer.android.com/jetpack?hl=es-419):
 
 Librerías externas:
 
-* N/A
+* [Easy Validation](https://github.com/wajahatkarim3/EasyValidation)
 
 ### Capturas de pantalla
 
+<img src="/resources/images/01%20Splash%20Screen.png" height="480"> <img src="/resources/images/02%20Empty%20Screen.png" height="480"> <img src="/resources/images/03%20Register%20Screen.png" height="480">
 
+<img src="/resources/images/04%20Register%20Screen.png" height="480"> <img src="/resources/images/05%20Draw%20Screen.png" height="480"> <img src="/resources/images/06%20Car%20List%20Screen.png" height="480">
 
 ### Video Demo
 
-
+N/A
 
 ### Guía de estilos
 
 En el diseño de la app se siguieron los lineamientos de [Material Design](https://material.io/). El prototipo se elaboró con [Figma](https://www.figma.com). Puedes descargar o consultar estos recursos en los siguientes enlaces:
 
+* [Archivo PDF](https://github.com/RolandoSelvera/Parking_Log/blob/master/resources/design/Parking%20Log.pdf)
+* [Archivo Figma](https://github.com/RolandoSelvera/Parking_Log/blob/master/resources/design/Parking%20Log.fig)
 
 ### Descarga del proyecto y otros recursos
 
-El proyecto puedes clonarlo o descargarlo si lo deseas. Si requieres el APK (no firmado) o necesitas consultar otros recursos usados en el proyecto, busca en los siguientes enlaces:
+El proyecto puedes clonarlo o descargarlo si lo deseas. Si necesitas consultar otros recursos usados en el proyecto, busca en el siguiente enlace:
 
+* [Otros recursos](https://github.com/RolandoSelvera/Parking_Log/tree/master/resources)
 
 ### Contacto del desarrollador
 
