@@ -1,7 +1,6 @@
 package com.rolandoselvera.parkinglog.view.fragments.register
 
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -40,15 +39,21 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
         viewModel.registerCar.observe(viewLifecycleOwner) { result ->
             when (result?.status) {
                 RegisterStatus.SUCCESS -> {
-                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                    showAlert(
+                        title = getString(R.string.success),
+                        message = result.message,
+                        onAccept = {
+                            goToCarsList()
+                        }
+                    )
                 }
 
                 RegisterStatus.ERROR -> {
-                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                    toast(result.message)
                 }
 
                 RegisterStatus.EXCEPTION -> {
-                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                    toast(result.message)
                 }
 
                 else -> {}
@@ -59,6 +64,12 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
     override fun initializeViews() {
         setupRecyclerAdapter()
         setupUI()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.registerCar.value = null
+        viewModel.registerCar.removeObservers(viewLifecycleOwner)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -81,10 +92,12 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
             setupToolbar()
 
             buttonSave.setOnClickListener {
+                hideKeyboard()
                 insertCar()
             }
 
             buttonCancel.setOnClickListener {
+                hideKeyboard()
                 goToCarsList()
             }
         }
@@ -95,7 +108,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
 
         adapter = CarSidesAdapter {
             sides
-            Toast.makeText(requireContext(), it.sideCar, Toast.LENGTH_SHORT).show()
+            toast(it.sideCar)
         }
         binding.containerSides.recyclerView.adapter = adapter
         adapter.submitList(sides.toList())
@@ -187,18 +200,12 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
                 )
 
                 viewModel.registerCar(request)
-                goToCarsList()
             }
         }
-    }
-
-    private fun removeObservables() {
-        viewModel.registerCar.removeObservers(viewLifecycleOwner)
     }
 
     private fun goToCarsList() {
         val action = RegisterFragmentDirections.actionRegisterFragmentToCarsListFragment()
         findNavController().navigate(action)
-        removeObservables()
     }
 }

@@ -1,6 +1,5 @@
 package com.rolandoselvera.parkinglog.viewmodels.register
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,30 +12,20 @@ import kotlinx.coroutines.launch
 class RegisterCarViewModel(private val carRepository: CarRepository) :
     ViewModel() {
 
-    private val resultStatus = MutableLiveData<ResultError?>()
-    val registerCar: MutableLiveData<ResultError?> get() = resultStatus
+    val registerCar = MutableLiveData<ResultError?>()
 
     fun registerCar(car: Car) {
         viewModelScope.launch {
             try {
                 val resultError = carRepository.insertCar(car)
                 if (resultError.status == RegisterStatus.SUCCESS) {
-                    resultStatus.postValue(resultError)
-                    Log.d("TAG_SUCCESS", resultError.toString())
+                    registerCar.postValue(resultError)
                 } else {
-                    resultStatus.postValue(resultError)
-                    Log.d("TAG_ERROR", resultError.toString())
+                    registerCar.postValue(resultError)
                 }
             } catch (e: Exception) {
-                resultStatus.postValue(ResultError(RegisterStatus.EXCEPTION, e.message))
-                Log.d("TAG_EXCEPT", e.message.toString())
+                registerCar.postValue(ResultError(RegisterStatus.EXCEPTION, e.message))
             }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("TAG_ONCLEAR", "onCleared called")
-        resultStatus.postValue(null)
     }
 }

@@ -11,7 +11,7 @@ class CarRepository(private val carDao: CarDao) {
     suspend fun insertCar(car: Car): ResultError {
         return try {
             carDao.insert(car)
-            ResultError(RegisterStatus.SUCCESS, "Success!")
+            ResultError(RegisterStatus.SUCCESS, "Register successful!")
         } catch (e: Exception) {
             e.message
             ResultError(RegisterStatus.EXCEPTION, "Error: " + e.message)

@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.rolandoselvera.parkinglog.R
 
 /**
  * A simple [Fragment] subclass.
@@ -21,11 +24,18 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     private var _binding: VB? = null
     val binding get() = _binding!!
 
+    private lateinit var dialog: MaterialAlertDialogBuilder
+
     abstract fun getViewBinding(): VB
 
     abstract fun initializeViews()
 
     abstract fun initializeViewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        dialog = MaterialAlertDialogBuilder(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -47,7 +57,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         _binding = null
     }
 
-    private fun hideKeyboard() {
+    fun hideKeyboard() {
         val inputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
@@ -71,6 +81,26 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                     }
                 }
             })
+        }
+    }
+
+    fun toast(message: String?) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showAlert(title: String?, message: String?, onAccept: () -> Unit) {
+        if (::dialog.isInitialized) {
+            dialog
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton(requireContext().getString(R.string.accept)) { _, _ ->
+                    onAccept()
+                }
+                .setOnDismissListener {
+                    it.dismiss()
+                }
+                .show()
         }
     }
 }
