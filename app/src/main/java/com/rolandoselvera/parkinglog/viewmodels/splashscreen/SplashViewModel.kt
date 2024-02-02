@@ -1,4 +1,4 @@
-package com.rolandoselvera.parkinglog.viewmodels
+package com.rolandoselvera.parkinglog.viewmodels.splashscreen
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.delay

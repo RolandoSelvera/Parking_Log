@@ -10,8 +10,8 @@ import com.rolandoselvera.parkinglog.data.models.Car
 import com.rolandoselvera.parkinglog.databinding.FragmentCarsListBinding
 import com.rolandoselvera.parkinglog.view.adapters.CarsListAdapter
 import com.rolandoselvera.parkinglog.view.fragments.base.BaseFragment
-import com.rolandoselvera.parkinglog.viewmodels.CarListViewModel
-import com.rolandoselvera.parkinglog.viewmodels.CarsViewModelFactory
+import com.rolandoselvera.parkinglog.viewmodels.home.CarListViewModel
+import com.rolandoselvera.parkinglog.viewmodels.home.CarsViewModelFactory
 
 /**
  * A simple [Fragment] subclass.
@@ -43,7 +43,6 @@ class CarsListFragment : BaseFragment<FragmentCarsListBinding>() {
 
     override fun initializeViews() {
         setupRecyclerAdapter()
-        //setupUI()
     }
 
     override fun onResume() {

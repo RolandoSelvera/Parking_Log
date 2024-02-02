@@ -8,6 +8,7 @@ buildscript {
         set("navigationVersion", "2.7.6")
         set("lifecycleVersion", "2.7.0")
         set("roomVersion", "2.6.1")
+        set("easyValidationVersion", "1.0.4")
     }
 
     dependencies {

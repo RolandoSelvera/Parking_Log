@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -30,12 +31,12 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = getViewBinding()
-        initializeViewModel()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initializeViewModel()
         initializeViews()
         hideKeyboard()
     }
@@ -50,6 +51,12 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         val inputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
+    }
+
+    fun setupToolbar() {
+        setHasOptionsMenu(true)
+        val toolbar = (activity as AppCompatActivity?)?.supportActionBar
+        toolbar?.setDisplayHomeAsUpEnabled(true)
     }
 
     fun fabShrink(recyclerView: RecyclerView, fab: ExtendedFloatingActionButton) {

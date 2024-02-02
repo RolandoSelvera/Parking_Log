@@ -2,14 +2,21 @@ package com.rolandoselvera.parkinglog.view.fragments.register
 
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.rolandoselvera.parkinglog.R
+import com.rolandoselvera.parkinglog.core.base.App
+import com.rolandoselvera.parkinglog.data.models.Car
 import com.rolandoselvera.parkinglog.data.models.Side
 import com.rolandoselvera.parkinglog.databinding.FragmentRegisterBinding
+import com.rolandoselvera.parkinglog.utils.RegisterStatus
 import com.rolandoselvera.parkinglog.view.adapters.CarSidesAdapter
 import com.rolandoselvera.parkinglog.view.fragments.base.BaseFragment
+import com.rolandoselvera.parkinglog.viewmodels.register.RegisterCarViewModel
+import com.rolandoselvera.parkinglog.viewmodels.register.RegisterCarViewModelFactory
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
+
 
 /**
  * A simple [Fragment] subclass.
@@ -20,14 +27,38 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
 
     private lateinit var adapter: CarSidesAdapter
     private var sides: List<Side> = listOf()
+
+    private val viewModel: RegisterCarViewModel by activityViewModels {
+        RegisterCarViewModelFactory(
+            (activity?.application as App).database.resultCarDao()
+        )
+    }
+
     override fun getViewBinding() = FragmentRegisterBinding.inflate(layoutInflater)
+
+    override fun initializeViewModel() {
+        viewModel.registerCar.observe(viewLifecycleOwner) { result ->
+            when (result?.status) {
+                RegisterStatus.SUCCESS -> {
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                }
+
+                RegisterStatus.ERROR -> {
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                }
+
+                RegisterStatus.EXCEPTION -> {
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                }
+
+                else -> {}
+            }
+        }
+    }
+
     override fun initializeViews() {
         setupRecyclerAdapter()
         setupUI()
-    }
-
-    override fun initializeViewModel() {
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -47,9 +78,15 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
         binding.apply {
             containerSides.recyclerView.isNestedScrollingEnabled = false
 
-            setHasOptionsMenu(true)
-            val toolbar = (activity as AppCompatActivity?)?.supportActionBar
-            toolbar?.setDisplayHomeAsUpEnabled(true)
+            setupToolbar()
+
+            buttonSave.setOnClickListener {
+                insertCar()
+            }
+
+            buttonCancel.setOnClickListener {
+                goToCarsList()
+            }
         }
     }
 
@@ -73,8 +110,95 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
         )
     }
 
+    private fun validateForm(): Boolean {
+        var error = false
+
+        binding.apply {
+            fieldBrand.validator().nonEmpty().addErrorCallback {
+                tilBrand.isErrorEnabled = true
+                if (it.contains("empty", true)) {
+                    tilBrand.error = getString(R.string.required_field)
+                } else {
+                    tilBrand.error = getString(R.string.required_field)
+                }
+                error = true
+            }.addSuccessCallback {
+                tilBrand.isErrorEnabled = false
+                tilBrand.error = null
+            }.check()
+
+            fieldModel.validator().nonEmpty().addErrorCallback {
+                tilModel.isErrorEnabled = true
+                if (it.contains("empty", true)) {
+                    tilModel.error = getString(R.string.required_field)
+                } else {
+                    tilModel.error = getString(R.string.required_field)
+                }
+                error = true
+            }.addSuccessCallback {
+                tilModel.isErrorEnabled = false
+                tilModel.error = null
+            }.check()
+
+            fieldCarPlate.validator().nonEmpty().addErrorCallback {
+                tilCarPlate.isErrorEnabled = true
+                if (it.contains("empty", true)) {
+                    tilCarPlate.error = getString(R.string.required_field)
+                } else {
+                    tilCarPlate.error = getString(R.string.required_field)
+                }
+                error = true
+            }.addSuccessCallback {
+                tilCarPlate.isErrorEnabled = false
+                tilCarPlate.error = null
+            }.check()
+
+            fieldColor.validator().nonEmpty().addErrorCallback {
+                tilColor.isErrorEnabled = true
+                if (it.contains("empty", true)) {
+                    tilColor.error = getString(R.string.required_field)
+                } else {
+                    tilColor.error = getString(R.string.required_field)
+                }
+                error = true
+            }.addSuccessCallback {
+                tilColor.isErrorEnabled = false
+                tilColor.error = null
+            }.check()
+        }
+
+        return error
+    }
+
+    private fun insertCar() {
+        binding.apply {
+            if (!validateForm()) {
+                val request = Car(
+                    brand = fieldBrand.text?.trim().toString(),
+                    model = fieldModel.text?.trim().toString(),
+                    carPlate = fieldCarPlate.text?.trim().toString(),
+                    color = fieldColor.text?.trim().toString(),
+                    owner = fieldOwner.text?.takeIf { it.isNotEmpty() }?.trim()?.toString()
+                        ?: getString(R.string.none),
+                    frontSide = "",
+                    backSide = "",
+                    leftSide = "",
+                    rightSide = ""
+                )
+
+                viewModel.registerCar(request)
+                goToCarsList()
+            }
+        }
+    }
+
+    private fun removeObservables() {
+        viewModel.registerCar.removeObservers(viewLifecycleOwner)
+    }
+
     private fun goToCarsList() {
         val action = RegisterFragmentDirections.actionRegisterFragmentToCarsListFragment()
         findNavController().navigate(action)
+        removeObservables()
     }
 }

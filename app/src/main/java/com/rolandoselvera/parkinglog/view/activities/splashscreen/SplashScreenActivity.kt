@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.rolandoselvera.parkinglog.R
 import com.rolandoselvera.parkinglog.view.activities.main.MainActivity
-import com.rolandoselvera.parkinglog.viewmodels.SplashViewModel
+import com.rolandoselvera.parkinglog.viewmodels.splashscreen.SplashViewModel
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {

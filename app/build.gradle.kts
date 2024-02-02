@@ -50,6 +50,7 @@ dependencies {
     val navigationVersion = rootProject.extra["navigationVersion"]
     val lifecycleVersion = rootProject.extra["lifecycleVersion"]
     val roomVersion = rootProject.extra["roomVersion"]
+    val easyValidationVersion = rootProject.extra["easyValidationVersion"]
 
     implementation("androidx.core:core-ktx:$coreKtxVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -71,4 +72,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
+
+    // Validation Fields:
+    implementation("com.wajahatkarim:easyvalidation-core:$easyValidationVersion")
 }
