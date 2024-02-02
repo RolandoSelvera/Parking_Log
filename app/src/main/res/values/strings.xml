@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Parking Log</string>
+    <string name="cars">Cars</string>
+    <string name="add">Add</string>
+    <string name="empty_list">Your List Is Empty</string>
+    <string name="car_title">%1$s - %2$s - %3$s</string>
+    <string name="register_car">Register Car</string>
+    <string name="brand">Brand <font color='#FF0000'>*</font></string>
+    <string name="model">Model <font color='#FF0000'>*</font></string>
+    <string name="car_plate">Car Plate <font color='#FF0000'>*</font></string>
+    <string name="color">Color <font color='#FF0000'>*</font></string>
+    <string name="owner">Owner</string>
+    <string name="select_view">Select the view</string>
+    <string name="front">Front</string>
+    <string name="back">Back</string>
+    <string name="right_side">Right Side</string>
+    <string name="left_side">Left Side</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="required_field">Required field</string>
+    <string name="none">None</string>
+    <string name="success">Success!</string>
+    <string name="accept">Accept</string>
+    <string name="select">Select</string>
+    <string name="damaged_area">damaged area</string>
+    <string name="delete">Delete car</string>
+    <string name="want_delete">Do you want to delete this car?</string>
 </resources>

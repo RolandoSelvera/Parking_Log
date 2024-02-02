@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryColor"
-    tools:context=".view.SplashScreenActivity">
+    tools:context=".view.activities.splashscreen.SplashScreenActivity">
 
     <!-- Otras opciones para imágenes circulares:
     * Crear CustomView.
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background" />
+            android:src="@drawable/ic_img_preview" />
 
     </androidx.cardview.widget.CardView>
 
@@ -41,7 +41,7 @@
         android:fontFamily="@font/questrial"
         android:text="@string/app_name"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_25"
+        android:textSize="@dimen/text_32"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

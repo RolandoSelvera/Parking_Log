@@ -1,4 +1,4 @@
-package com.rolandoselvera.parkinglog.view
+package com.rolandoselvera.parkinglog.view.activities.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

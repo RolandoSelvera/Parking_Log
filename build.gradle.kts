@@ -7,6 +7,13 @@ buildscript {
         set("constraintLayoutVersion", "2.1.4")
         set("navigationVersion", "2.7.6")
         set("lifecycleVersion", "2.7.0")
+        set("roomVersion", "2.6.1")
+        set("easyValidationVersion", "1.0.4")
+    }
+
+    dependencies {
+        val navVersion = rootProject.extra["navigationVersion"]
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion")
     }
 }
 

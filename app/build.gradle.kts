@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-kapt")
 }
 
 android {
@@ -26,6 +28,11 @@ android {
             )
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -42,6 +49,8 @@ dependencies {
     val constraintLayoutVersion = rootProject.extra["constraintLayoutVersion"]
     val navigationVersion = rootProject.extra["navigationVersion"]
     val lifecycleVersion = rootProject.extra["lifecycleVersion"]
+    val roomVersion = rootProject.extra["roomVersion"]
+    val easyValidationVersion = rootProject.extra["easyValidationVersion"]
 
     implementation("androidx.core:core-ktx:$coreKtxVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -58,4 +67,12 @@ dependencies {
     // Lifecycle libraries:
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+
+    // Room:
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+
+    // Validation Fields:
+    implementation("com.wajahatkarim:easyvalidation-core:$easyValidationVersion")
 }
