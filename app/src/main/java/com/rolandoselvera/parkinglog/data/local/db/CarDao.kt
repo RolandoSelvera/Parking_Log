@@ -16,8 +16,11 @@ interface CarDao {
     @Update
     suspend fun update(car: Car)
 
+    @Query("SELECT * FROM Cars WHERE id = :id")
+    suspend fun getCarById(id: Int): Car
+
     @Query("DELETE FROM Cars WHERE id = :carId")
-    suspend fun deleteCarById(carId: Long)
+    suspend fun deleteCarById(carId: Int)
 
     @Query("SELECT * FROM Cars ORDER BY id DESC")
     fun getCarsByOrder(): Flow<List<Car>>

@@ -1,15 +1,19 @@
 package com.rolandoselvera.parkinglog.view.fragments.register
 
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.rolandoselvera.parkinglog.R
 import com.rolandoselvera.parkinglog.core.base.App
 import com.rolandoselvera.parkinglog.data.models.Car
 import com.rolandoselvera.parkinglog.data.models.Side
 import com.rolandoselvera.parkinglog.databinding.FragmentRegisterBinding
 import com.rolandoselvera.parkinglog.utils.RegisterStatus
+import com.rolandoselvera.parkinglog.utils.Result
 import com.rolandoselvera.parkinglog.view.adapters.CarSidesAdapter
 import com.rolandoselvera.parkinglog.view.fragments.base.BaseFragment
 import com.rolandoselvera.parkinglog.viewmodels.register.RegisterCarViewModel
@@ -26,6 +30,9 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
 
     private lateinit var adapter: CarSidesAdapter
     private var sides: List<Side> = listOf()
+    private val navigationArgs: RegisterFragmentArgs by navArgs()
+
+    private var carId: Int = -1
 
     private val viewModel: RegisterCarViewModel by activityViewModels {
         RegisterCarViewModelFactory(
@@ -39,13 +46,64 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
         viewModel.registerCar.observe(viewLifecycleOwner) { result ->
             when (result?.status) {
                 RegisterStatus.SUCCESS -> {
-                    showAlert(
-                        title = getString(R.string.success),
+                    toast(result.message)
+                    goToCarsList()
+                }
+
+                RegisterStatus.ERROR -> {
+                    toast(result.message)
+                }
+
+                RegisterStatus.EXCEPTION -> {
+                    toast(result.message)
+                }
+
+                else -> {}
+            }
+        }
+
+        viewModel.updateCar.observe(viewLifecycleOwner) { result ->
+            when (result?.status) {
+                RegisterStatus.SUCCESS -> {
+                    toast(result.message)
+                    goToCarsList()
+                }
+
+                RegisterStatus.ERROR -> {
+                    toast(result.message)
+                }
+
+                RegisterStatus.EXCEPTION -> {
+                    toast(result.message)
+                }
+
+                else -> {}
+            }
+        }
+
+        viewModel.retrieveCar.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Success -> {
+                    val car = result.data
+                    setForm(car)
+                }
+
+                is Result.Error -> {
+                    toast(result.message)
+                }
+
+                else -> {}
+            }
+        }
+
+        viewModel.deleteCar.observe(viewLifecycleOwner) { result ->
+            when (result?.status) {
+                RegisterStatus.SUCCESS -> {
+                    showAlert(title = getString(R.string.success),
                         message = result.message,
                         onAccept = {
                             goToCarsList()
-                        }
-                    )
+                        })
                 }
 
                 RegisterStatus.ERROR -> {
@@ -74,7 +132,13 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.registerCar.value = null
+        viewModel.deleteCar.value = null
+        viewModel.retrieveCar.value = null
+        viewModel.updateCar.value = null
         viewModel.registerCar.removeObservers(viewLifecycleOwner)
+        viewModel.deleteCar.removeObservers(viewLifecycleOwner)
+        viewModel.retrieveCar.removeObservers(viewLifecycleOwner)
+        viewModel.updateCar.removeObservers(viewLifecycleOwner)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -84,25 +148,59 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
                 true
             }
 
+            R.id.delete -> {
+                if (carId > -1) {
+                    showAlert(
+                        title = getString(R.string.delete),
+                        message = getString(R.string.want_delete),
+                        onAccept = {
+                            viewModel.deleteCarById(carId)
+                            goToCarsList()
+                        }, onCancel = {})
+                }
+                true
+            }
+
             else -> {
                 super.onOptionsItemSelected(item)
             }
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_register, menu)
+    }
+
+
     private fun setupUI() {
+        carId = navigationArgs.carId
+        if (carId > -1) {
+            viewModel.getCarById(carId)
+        }
+
         binding.apply {
             containerSides.recyclerView.isNestedScrollingEnabled = false
 
             buttonSave.setOnClickListener {
                 hideKeyboard()
-                insertCar()
+                if (carId > -1) updateCar() else insertCar()
             }
 
             buttonCancel.setOnClickListener {
                 hideKeyboard()
                 goToCarsList()
             }
+        }
+    }
+
+    private fun setForm(car: Car?) {
+        binding.apply {
+            fieldBrand.setText(car?.brand)
+            fieldModel.setText(car?.model)
+            fieldCarPlate.setText(car?.carPlate)
+            fieldColor.setText(car?.color)
+            fieldOwner.setText(car?.owner)
         }
     }
 
@@ -203,6 +301,28 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
                 )
 
                 viewModel.registerCar(request)
+            }
+        }
+    }
+
+    private fun updateCar() {
+        binding.apply {
+            if (!validateForm()) {
+                val request = Car(
+                    id = carId,
+                    brand = fieldBrand.text?.trim().toString(),
+                    model = fieldModel.text?.trim().toString(),
+                    carPlate = fieldCarPlate.text?.trim().toString(),
+                    color = fieldColor.text?.trim().toString(),
+                    owner = fieldOwner.text?.takeIf { it.isNotEmpty() }?.trim()?.toString()
+                        ?: getString(R.string.none),
+                    frontSide = "",
+                    backSide = "",
+                    leftSide = "",
+                    rightSide = ""
+                )
+
+                viewModel.updateCar(request)
             }
         }
     }

@@ -65,16 +65,16 @@ class CarsListFragment : BaseFragment<FragmentCarsListBinding>() {
     }
 
     private fun setupRecyclerAdapter() {
-        adapter = CarsListAdapter(requireContext()) {
+        adapter = CarsListAdapter(requireContext()) { car ->
             carsList
-            goToRegister()
+            goToRegister(car.id)
         }
         binding.containerCarsList.recyclerView.adapter = adapter
         adapter.submitList(carsList.toList())
     }
 
-    private fun goToRegister() {
-        val action = CarsListFragmentDirections.actionCarsListFragmentToRegisterFragment()
+    private fun goToRegister(carId: Int = -1) {
+        val action = CarsListFragmentDirections.actionCarsListFragmentToRegisterFragment(carId)
         findNavController().navigate(action)
     }
 }

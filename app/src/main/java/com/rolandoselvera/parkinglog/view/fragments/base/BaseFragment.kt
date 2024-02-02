@@ -109,4 +109,23 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                 .show()
         }
     }
+
+    fun showAlert(title: String?, message: String?, onAccept: () -> Unit, onCancel: ()-> Unit) {
+        if (::dialog.isInitialized) {
+            dialog
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.accept)) { _, _ ->
+                    onAccept()
+                }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                    onCancel()
+                }
+                .setOnDismissListener {
+                    it.dismiss()
+                }
+                .show()
+        }
+    }
 }
