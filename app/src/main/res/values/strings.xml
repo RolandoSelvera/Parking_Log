@@ -21,4 +21,6 @@
     <string name="none">None</string>
     <string name="success">Success!</string>
     <string name="accept">Accept</string>
+    <string name="select">Select</string>
+    <string name="damaged_area">damaged area</string>
 </resources>

@@ -66,6 +66,11 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
         setupUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        setupToolbar()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.registerCar.value = null
@@ -89,8 +94,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
         binding.apply {
             containerSides.recyclerView.isNestedScrollingEnabled = false
 
-            setupToolbar()
-
             buttonSave.setOnClickListener {
                 hideKeyboard()
                 insertCar()
@@ -106,9 +109,9 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
     private fun setupRecyclerAdapter() {
         sides = sidesList()
 
-        adapter = CarSidesAdapter {
+        adapter = CarSidesAdapter { side ->
             sides
-            toast(it.sideCar)
+            goToCarDetail(side)
         }
         binding.containerSides.recyclerView.adapter = adapter
         adapter.submitList(sides.toList())
@@ -206,6 +209,11 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
 
     private fun goToCarsList() {
         val action = RegisterFragmentDirections.actionRegisterFragmentToCarsListFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun goToCarDetail(side: Side) {
+        val action = RegisterFragmentDirections.actionRegisterFragmentToCarDetailFragment()
         findNavController().navigate(action)
     }
 }

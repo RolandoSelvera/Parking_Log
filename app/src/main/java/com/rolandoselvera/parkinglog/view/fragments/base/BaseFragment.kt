@@ -66,7 +66,13 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     fun setupToolbar() {
         setHasOptionsMenu(true)
         val toolbar = (activity as AppCompatActivity?)?.supportActionBar
+        toolbar?.show()
         toolbar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    fun hideToolbar() {
+        val toolbar = (activity as AppCompatActivity?)?.supportActionBar
+        toolbar?.hide()
     }
 
     fun fabShrink(recyclerView: RecyclerView, fab: ExtendedFloatingActionButton) {
