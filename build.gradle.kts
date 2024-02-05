@@ -9,6 +9,9 @@ buildscript {
         set("lifecycleVersion", "2.7.0")
         set("roomVersion", "2.6.1")
         set("easyValidationVersion", "1.0.4")
+        set("coilVersion", "2.5.0")
+        set("preferencesVersion", "1.2.1")
+        set("gsonVersion", "2.10.1")
     }
 
     dependencies {

@@ -44,6 +44,14 @@
         android:id="@+id/carDetailFragment"
         android:name="com.rolandoselvera.parkinglog.view.fragments.carDetail.CarDetailFragment"
         tools:layout="@layout/fragment_car_detail">
+        <argument
+            android:name="side"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="car_id"
+            android:defaultValue="-1"
+            app:argType="integer" />
         <action
             android:id="@+id/action_carDetailFragment_to_registerFragment"
             app:destination="@id/registerFragment"

@@ -15,10 +15,13 @@ Android y [Jetpack](https://developer.android.com/jetpack?hl=es-419):
 * [Navigation](https://developer.android.com/guide/navigation/navigation-getting-started)
 * [Fragments](https://developer.android.com/guide/components/fragments)
 * [Room](https://developer.android.com/training/data-storage/room?hl=es)
+* [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences?hl=es-419)
 
 Librerías externas:
 
 * [Easy Validation](https://github.com/wajahatkarim3/EasyValidation)
+* [Coil](https://github.com/coil-kt/coil)
+* [Gson](https://github.com/google/gson)
 
 ### Capturas de pantalla
 

@@ -51,6 +51,9 @@ dependencies {
     val lifecycleVersion = rootProject.extra["lifecycleVersion"]
     val roomVersion = rootProject.extra["roomVersion"]
     val easyValidationVersion = rootProject.extra["easyValidationVersion"]
+    val coilVersion = rootProject.extra["coilVersion"]
+    val preferencesVersion = rootProject.extra["preferencesVersion"]
+    val gsonVersion = rootProject.extra["gsonVersion"]
 
     implementation("androidx.core:core-ktx:$coreKtxVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -68,6 +71,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
 
+    // Preferences:
+    implementation("androidx.preference:preference-ktx:$preferencesVersion")
+
     // Room:
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
@@ -75,4 +81,10 @@ dependencies {
 
     // Validation Fields:
     implementation("com.wajahatkarim:easyvalidation-core:$easyValidationVersion")
+
+    // Coil:
+    implementation("io.coil-kt:coil:$coilVersion")
+
+    // Gson:
+    implementation("com.google.code.gson:gson:$gsonVersion")
 }

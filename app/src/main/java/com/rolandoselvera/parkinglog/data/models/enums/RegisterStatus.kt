@@ -1,4 +1,4 @@
-package com.rolandoselvera.parkinglog.utils
+package com.rolandoselvera.parkinglog.data.models.enums
 
 enum class RegisterStatus {
     SUCCESS,

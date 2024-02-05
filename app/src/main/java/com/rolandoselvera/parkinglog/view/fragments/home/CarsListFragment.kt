@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.rolandoselvera.parkinglog.core.base.App
+import com.rolandoselvera.parkinglog.data.local.preferences.PreferencesProvider
 import com.rolandoselvera.parkinglog.data.models.Car
 import com.rolandoselvera.parkinglog.databinding.FragmentCarsListBinding
 import com.rolandoselvera.parkinglog.view.adapters.CarsListAdapter
@@ -49,6 +50,7 @@ class CarsListFragment : BaseFragment<FragmentCarsListBinding>() {
         super.onResume()
         val toolbar = (activity as AppCompatActivity?)?.supportActionBar
         toolbar?.setDisplayHomeAsUpEnabled(false)
+        PreferencesProvider.removePreferences()
     }
 
     private fun setupUI() {
