@@ -1,4 +1,4 @@
-package com.rolandoselvera.parkinglog.utils
+package com.rolandoselvera.parkinglog.view.customviews
 
 import android.content.Context
 import android.graphics.*

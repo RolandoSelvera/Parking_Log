@@ -27,3 +27,16 @@ data class Car(
     @ColumnInfo(name = "Right_Side")
     val rightSide: String?,
 )
+
+data class CarEntity(
+    var id: Int?,
+    val brand: String?,
+    val model: String?,
+    val carPlate: String?,
+    val color: String?,
+    val owner: String?,
+    val frontSide: String?,
+    val backSide: String?,
+    val leftSide: String?,
+    val rightSide: String?,
+)

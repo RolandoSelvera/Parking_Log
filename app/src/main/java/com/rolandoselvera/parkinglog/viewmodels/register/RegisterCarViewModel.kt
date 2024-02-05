@@ -4,11 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rolandoselvera.parkinglog.data.models.Car
-import com.rolandoselvera.parkinglog.utils.ResultError
+import com.rolandoselvera.parkinglog.data.models.results.ResultError
 import com.rolandoselvera.parkinglog.data.repository.CarRepository
-import com.rolandoselvera.parkinglog.utils.RegisterStatus
+import com.rolandoselvera.parkinglog.data.models.enums.RegisterStatus
 import kotlinx.coroutines.launch
-import com.rolandoselvera.parkinglog.utils.Result
+import com.rolandoselvera.parkinglog.data.models.results.Result
 
 class RegisterCarViewModel(private val carRepository: CarRepository) :
     ViewModel() {

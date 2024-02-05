@@ -2,6 +2,7 @@ package com.rolandoselvera.parkinglog.core.base
 
 import android.app.Application
 import com.rolandoselvera.parkinglog.data.local.db.CarDatabase
+import com.rolandoselvera.parkinglog.data.local.preferences.PreferencesProvider
 
 class App : Application() {
     // Se utiliza el delegado 'lazy' para que crear la instancia database de forma diferida
@@ -9,4 +10,9 @@ class App : Application() {
     // inicie la app). Esta acción creará la base de datos (la base de datos física en el
     // dispositivo) en el primer acceso.
     val database: CarDatabase by lazy { CarDatabase.getDatabase(this) }
+
+    override fun onCreate() {
+        super.onCreate()
+        PreferencesProvider.init(this)
+    }
 }

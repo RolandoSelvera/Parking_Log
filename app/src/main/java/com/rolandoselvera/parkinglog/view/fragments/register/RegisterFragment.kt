@@ -9,17 +9,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.rolandoselvera.parkinglog.R
 import com.rolandoselvera.parkinglog.core.base.App
+import com.rolandoselvera.parkinglog.data.local.preferences.PreferencesProvider
 import com.rolandoselvera.parkinglog.data.models.Car
 import com.rolandoselvera.parkinglog.data.models.Side
 import com.rolandoselvera.parkinglog.databinding.FragmentRegisterBinding
-import com.rolandoselvera.parkinglog.utils.RegisterStatus
-import com.rolandoselvera.parkinglog.utils.Result
+import com.rolandoselvera.parkinglog.data.models.enums.RegisterStatus
+import com.rolandoselvera.parkinglog.data.models.results.Result
+import com.rolandoselvera.parkinglog.utils.toCarEntity
+import com.rolandoselvera.parkinglog.utils.validateAndSetError
 import com.rolandoselvera.parkinglog.view.adapters.CarSidesAdapter
 import com.rolandoselvera.parkinglog.view.fragments.base.BaseFragment
 import com.rolandoselvera.parkinglog.viewmodels.register.RegisterCarViewModel
 import com.rolandoselvera.parkinglog.viewmodels.register.RegisterCarViewModelFactory
-import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
-
 
 /**
  * A simple [Fragment] subclass.
@@ -50,11 +51,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
                     goToCarsList()
                 }
 
-                RegisterStatus.ERROR -> {
-                    toast(result.message)
-                }
-
-                RegisterStatus.EXCEPTION -> {
+                RegisterStatus.ERROR, RegisterStatus.EXCEPTION -> {
                     toast(result.message)
                 }
 
@@ -69,11 +66,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
                     goToCarsList()
                 }
 
-                RegisterStatus.ERROR -> {
-                    toast(result.message)
-                }
-
-                RegisterStatus.EXCEPTION -> {
+                RegisterStatus.ERROR, RegisterStatus.EXCEPTION -> {
                     toast(result.message)
                 }
 
@@ -106,11 +99,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
                         })
                 }
 
-                RegisterStatus.ERROR -> {
-                    toast(result.message)
-                }
-
-                RegisterStatus.EXCEPTION -> {
+                RegisterStatus.ERROR, RegisterStatus.EXCEPTION -> {
                     toast(result.message)
                 }
 
@@ -175,8 +164,10 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
 
     private fun setupUI() {
         carId = navigationArgs.carId
-        if (carId > -1) {
+        if (carId > -1 && PreferencesProvider.CAR_ENTITY?.id == null) {
             viewModel.getCarById(carId)
+        } else {
+            setTempForm()
         }
 
         binding.apply {
@@ -196,6 +187,18 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
 
     private fun setForm(car: Car?) {
         binding.apply {
+            fieldBrand.setText(car?.brand)
+            fieldModel.setText(car?.model)
+            fieldCarPlate.setText(car?.carPlate)
+            fieldColor.setText(car?.color)
+            fieldOwner.setText(car?.owner)
+            PreferencesProvider.CAR_ENTITY = car.toCarEntity()
+        }
+    }
+
+    private fun setTempForm() {
+        binding.apply {
+            val car = PreferencesProvider.CAR_ENTITY
             fieldBrand.setText(car?.brand)
             fieldModel.setText(car?.model)
             fieldCarPlate.setText(car?.carPlate)
@@ -225,60 +228,13 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
     }
 
     private fun validateForm(): Boolean {
-        var error = false
+        var error: Boolean
 
         binding.apply {
-            fieldBrand.validator().nonEmpty().addErrorCallback {
-                tilBrand.isErrorEnabled = true
-                if (it.contains("empty", true)) {
-                    tilBrand.error = getString(R.string.required_field)
-                } else {
-                    tilBrand.error = getString(R.string.required_field)
-                }
-                error = true
-            }.addSuccessCallback {
-                tilBrand.isErrorEnabled = false
-                tilBrand.error = null
-            }.check()
-
-            fieldModel.validator().nonEmpty().addErrorCallback {
-                tilModel.isErrorEnabled = true
-                if (it.contains("empty", true)) {
-                    tilModel.error = getString(R.string.required_field)
-                } else {
-                    tilModel.error = getString(R.string.required_field)
-                }
-                error = true
-            }.addSuccessCallback {
-                tilModel.isErrorEnabled = false
-                tilModel.error = null
-            }.check()
-
-            fieldCarPlate.validator().nonEmpty().addErrorCallback {
-                tilCarPlate.isErrorEnabled = true
-                if (it.contains("empty", true)) {
-                    tilCarPlate.error = getString(R.string.required_field)
-                } else {
-                    tilCarPlate.error = getString(R.string.required_field)
-                }
-                error = true
-            }.addSuccessCallback {
-                tilCarPlate.isErrorEnabled = false
-                tilCarPlate.error = null
-            }.check()
-
-            fieldColor.validator().nonEmpty().addErrorCallback {
-                tilColor.isErrorEnabled = true
-                if (it.contains("empty", true)) {
-                    tilColor.error = getString(R.string.required_field)
-                } else {
-                    tilColor.error = getString(R.string.required_field)
-                }
-                error = true
-            }.addSuccessCallback {
-                tilColor.isErrorEnabled = false
-                tilColor.error = null
-            }.check()
+            error = fieldBrand.validateAndSetError(tilBrand)
+            error = fieldModel.validateAndSetError(tilModel)
+            error = fieldCarPlate.validateAndSetError(tilCarPlate)
+            error = fieldColor.validateAndSetError(tilColor)
         }
 
         return error
@@ -287,43 +243,53 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
     private fun insertCar() {
         binding.apply {
             if (!validateForm()) {
-                val request = Car(
-                    brand = fieldBrand.text?.trim().toString(),
-                    model = fieldModel.text?.trim().toString(),
-                    carPlate = fieldCarPlate.text?.trim().toString(),
-                    color = fieldColor.text?.trim().toString(),
-                    owner = fieldOwner.text?.takeIf { it.isNotEmpty() }?.trim()?.toString()
-                        ?: getString(R.string.none),
-                    frontSide = "",
-                    backSide = "",
-                    leftSide = "",
-                    rightSide = ""
-                )
-
+                val request = getNewCar()
                 viewModel.registerCar(request)
             }
+        }
+    }
+
+    private fun getNewCar(): Car {
+        binding.apply {
+            return Car(
+                brand = fieldBrand.text?.trim().toString(),
+                model = fieldModel.text?.trim().toString(),
+                carPlate = fieldCarPlate.text?.trim().toString(),
+                color = fieldColor.text?.trim().toString(),
+                owner = fieldOwner.text?.takeIf { it.isNotEmpty() }?.trim()?.toString()
+                    ?: getString(R.string.none),
+                frontSide = "",
+                backSide = "",
+                leftSide = "",
+                rightSide = ""
+            )
         }
     }
 
     private fun updateCar() {
         binding.apply {
             if (!validateForm()) {
-                val request = Car(
-                    id = carId,
-                    brand = fieldBrand.text?.trim().toString(),
-                    model = fieldModel.text?.trim().toString(),
-                    carPlate = fieldCarPlate.text?.trim().toString(),
-                    color = fieldColor.text?.trim().toString(),
-                    owner = fieldOwner.text?.takeIf { it.isNotEmpty() }?.trim()?.toString()
-                        ?: getString(R.string.none),
-                    frontSide = "",
-                    backSide = "",
-                    leftSide = "",
-                    rightSide = ""
-                )
-
+                val request = getNewInfoCar()
                 viewModel.updateCar(request)
             }
+        }
+    }
+
+    private fun getNewInfoCar(): Car {
+        binding.apply {
+            return Car(
+                id = carId,
+                brand = fieldBrand.text?.trim().toString(),
+                model = fieldModel.text?.trim().toString(),
+                carPlate = fieldCarPlate.text?.trim().toString(),
+                color = fieldColor.text?.trim().toString(),
+                owner = fieldOwner.text?.takeIf { it.isNotEmpty() }?.trim()?.toString()
+                    ?: getString(R.string.none),
+                frontSide = "",
+                backSide = "",
+                leftSide = "",
+                rightSide = ""
+            )
         }
     }
 
@@ -333,7 +299,12 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
     }
 
     private fun goToCarDetail(side: Side) {
-        val action = RegisterFragmentDirections.actionRegisterFragmentToCarDetailFragment()
+        setForm(getNewInfoCar())
+        val action =
+            RegisterFragmentDirections.actionRegisterFragmentToCarDetailFragment(
+                side.sideCar,
+                carId
+            )
         findNavController().navigate(action)
     }
 }

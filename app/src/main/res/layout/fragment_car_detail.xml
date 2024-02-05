@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imgTitle" />
 
-    <com.rolandoselvera.parkinglog.utils.DrawingView
+    <com.rolandoselvera.parkinglog.view.customviews.DrawingView
         android:id="@+id/drawingView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_0"
